@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
-import { User } from "../interfaces/user";
 
-interface JWTUser extends User {
+interface JWTUser {
   id: number;
+  fullname: string;
+  email: string;
 }
 export const JwtHandler = (user: JWTUser) => {
   const SECRET: any = process.env.JWT_SECRET;

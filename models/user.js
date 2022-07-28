@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       user.hasOne(models.wallet);
     }
+
+    toJSON() {
+      return {
+        ...this.get(),
+        password: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+      };
+    }
   }
   user.init(
     {
