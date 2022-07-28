@@ -1,4 +1,4 @@
-import { User } from "../interfaces/user";
+import { User, UserLogin } from "../interfaces/user";
 import { ResponseHandler } from "../util/response";
 import joi from "joi";
 const models = require("../models");
@@ -48,12 +48,50 @@ export const signUp = async (user: User) => {
       fullname: createdUser.fullname,
       email: createdUser.email,
     });
-    return ResponseHandler(200, "Account Created Successfully", {
+    return ResponseHandler(201, "Account Created Successfully", {
       token,
       user: { fullname: createdUser.fullname, email: createdUser.email },
     });
   } catch (error) {
     await t.rollback();
+    console.log(error);
+    return ResponseHandler(500, "Internal Server Error");
+  }
+};
+
+export const signIn = async (cred: UserLogin) => {
+  const schema = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().required(),
+  });
+
+  const validation = schema.validate({
+    email: cred.email,
+    password: cred.password,
+  });
+
+  if (validation.error) {
+    return ResponseHandler(422, validation.error.details[0].message);
+  }
+  try {
+    const user = await models.user.findOne({ where: { email: cred.email } });
+    if (!user) {
+      return ResponseHandler(404, "Invalid Email or Password");
+    }
+    const validatePassword = await bcrypt.compare(cred.password, user.password);
+    if (!validatePassword) {
+      return ResponseHandler(404, "Invalid Email or Password");
+    }
+    let token = JwtHandler({
+      id: user.id,
+      fullname: user.fullname,
+      email: user.email,
+    });
+    return ResponseHandler(200, "Successfully Login", {
+      token,
+      user: { email: user.email, fullname: user.fullname },
+    });
+  } catch (error) {
     console.log(error);
     return ResponseHandler(500, "Internal Server Error");
   }
