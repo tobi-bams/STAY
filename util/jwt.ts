@@ -1,10 +1,5 @@
 import jwt from "jsonwebtoken";
-
-interface JWTUser {
-  id: number;
-  fullname: string;
-  email: string;
-}
+import { JWTUser } from "../interfaces/user";
 export const JwtHandler = (user: JWTUser) => {
   const SECRET: any = process.env.JWT_SECRET;
   let token = jwt.sign(user, SECRET);

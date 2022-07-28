@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 const { sequelize } = require("./models");
 import Auth from "./routes/auth";
+import Address from "./routes/generate_address";
 
 const app: Application = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 dotenv.config();
 
 app.use("/auth", Auth);
+app.use("/address", Address);
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, async () => {
