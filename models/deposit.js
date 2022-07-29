@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      deposit.belongsTo(models.wallet);
     }
   }
   deposit.init(
