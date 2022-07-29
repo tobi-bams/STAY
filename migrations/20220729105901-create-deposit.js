@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false,
       },
       amount: {
-        type: Sequelize.DOUBLE(8, 2),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       address: {

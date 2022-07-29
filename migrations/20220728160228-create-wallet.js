@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       balance: {
-        type: Sequelize.DOUBLE(8, 2),
+        type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },

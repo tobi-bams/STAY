@@ -1,3 +1,5 @@
+const models = require("../models");
+
 interface WebHookResponse {
   data?: any;
   event: string;

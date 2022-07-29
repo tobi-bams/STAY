@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   wallet.init(
     {
       balance: {
-        type: DataTypes.DOUBLE(8, 2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },

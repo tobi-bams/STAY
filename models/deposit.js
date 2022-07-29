@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       amount: {
-        type: DataTypes.DOUBLE(8, 2),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       address: {
