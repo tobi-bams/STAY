@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 const { sequelize } = require("./models");
 import Auth from "./routes/auth";
 import Address from "./routes/generate_address";
+import Webhook from "./routes/webhook";
 
 const app: Application = express();
 
@@ -13,6 +14,7 @@ dotenv.config();
 
 app.use("/auth", Auth);
 app.use("/address", Address);
+app.use("/webhook", Webhook);
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, async () => {
