@@ -6,5 +6,6 @@ export const getFiatValue = async (coin: string) => {
     return response.data.rates[0].sale_rate;
   } catch (error) {
     console.log(error);
+    throw new Error("Exchange not fetched successfully");
   }
 };
