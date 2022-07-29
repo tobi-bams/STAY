@@ -5,6 +5,7 @@ const { sequelize } = require("./models");
 import Auth from "./routes/auth";
 import Address from "./routes/generate_address";
 import Webhook from "./routes/webhook";
+import Wallet from "./routes/wallet";
 
 const app: Application = express();
 
@@ -15,6 +16,7 @@ dotenv.config();
 app.use("/auth", Auth);
 app.use("/address", Address);
 app.use("/webhook", Webhook);
+app.use("/wallet", Wallet);
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, async () => {
