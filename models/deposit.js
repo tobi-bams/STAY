@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: "pending",
       },
+      reference: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       coin: {
         type: DataTypes.STRING,
         allowNull: false,
