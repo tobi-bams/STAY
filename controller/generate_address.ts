@@ -1,7 +1,6 @@
 import api from "../service/api";
 import { ResponseHandler } from "../util/response";
 import { JWTUser } from "../interfaces/user";
-import { register } from "ts-node";
 const models = require("../models");
 
 interface GenerateAddress {
@@ -14,7 +13,7 @@ export const GenerateAddress = async (req: GenerateAddress) => {
     where: { userId: req.user.id },
   });
   try {
-    const address = await api.post("address", { code: "DOGE" });
+    const address = await api.post("address", { code: req.coin });
     const createDeposit = await models.deposit.create({
       amount: 0,
       walletId: wallet.id,
