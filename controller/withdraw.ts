@@ -4,6 +4,7 @@ import { JWTUser } from "../interfaces/user";
 import joi from "joi";
 import { resolveBank } from "../service/resolveBank";
 import api from "../service/api";
+import { IntegerDataType } from "sequelize/types";
 
 interface Req {
   user: JWTUser;
@@ -20,6 +21,14 @@ interface ProviderPayout {
   payout?: { bank: Req; reference: string };
 }
 
+interface Widthdraw {
+  amount: number;
+  payout_reference: string;
+  wallet_id: number;
+  payout_id: number;
+  balance: number;
+}
+
 const createPayout = async (req: Req): Promise<ProviderPayout> => {
   try {
     const data = {
@@ -31,6 +40,40 @@ const createPayout = async (req: Req): Promise<ProviderPayout> => {
   } catch (error) {
     console.log(error);
     return { status: false, message: "Internal Server Error" };
+  }
+};
+
+const withdrawHandler = async (data: Widthdraw) => {
+  const t = await models.sequelize.transaction();
+  try {
+    const amount = Number(data.amount) * 100;
+    const payoutDetails = {
+      recipient: data.payout_reference,
+      amount: amount + 10000,
+    };
+    const requestPayout = await api.post("payouts", payoutDetails);
+    console.log(requestPayout.data.payout);
+    await models.withdraw.create(
+      {
+        walletId: data.wallet_id,
+        amount: amount + 12000,
+        payoutId: data.payout_id,
+        reference: requestPayout.data.payout.reference,
+        status: "success",
+      },
+      { transaction: t }
+    );
+    const newWalletBalance = data.balance - (amount + 1200);
+    await models.wallet.update(
+      { balance: newWalletBalance },
+      { where: { id: data.wallet_id }, transaction: t }
+    );
+    t.commit();
+    return ResponseHandler(200, `Withdrawal Successful`);
+  } catch (error) {
+    t.rollback();
+    console.log(error);
+    return ResponseHandler(500, "Internal Server Error");
   }
 };
 
@@ -64,7 +107,14 @@ export const Withdraw = async (req: Req) => {
       where: { accountNumber: req.account_number },
     });
     if (payoutExist) {
-      return ResponseHandler(200, "Proceed to make widthdrawals");
+      const withdraw = await withdrawHandler({
+        balance: user.wallet.balance,
+        payout_id: payoutExist.id,
+        payout_reference: payoutExist.reference,
+        wallet_id: user.wallet.id,
+        amount: req.amount,
+      });
+      return withdraw;
     } else {
       const account_name = await resolveBank({
         bank_code: req.bank_code,
@@ -81,7 +131,14 @@ export const Withdraw = async (req: Req) => {
             bankName: providerPayout.payout?.bank.bank_name,
             userId: req.user.id,
           });
-          return ResponseHandler(201, "created", savePayout);
+          const withdraw = await withdrawHandler({
+            amount: req.amount,
+            wallet_id: user.wallet.id,
+            payout_reference: savePayout.reference,
+            payout_id: savePayout.id,
+            balance: user.wallet.balance,
+          });
+          return withdraw;
         } else {
           return ResponseHandler(500, providerPayout.message);
         }

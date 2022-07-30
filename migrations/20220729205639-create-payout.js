@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
       },
       bankCode: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       reference: {
