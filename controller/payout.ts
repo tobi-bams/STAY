@@ -11,3 +11,13 @@ export const savePayout = async (data: JWTUser) => {
     return ResponseHandler(500, "Internal Server Error");
   }
 };
+
+export const getPayout = async (data: JWTUser) => {
+  try {
+    const payout = await models.payout.findOne({ where: { userId: data.id } });
+    return ResponseHandler(200, "Bank Details", payout);
+  } catch (error) {
+    console.log(error);
+    return ResponseHandler(500, "Internal Server Error");
+  }
+};

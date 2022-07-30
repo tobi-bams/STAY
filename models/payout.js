@@ -11,6 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       payout.belongsTo(models.user);
     }
+
+    toJSON() {
+      return {
+        ...this.get(),
+        createdAt: undefined,
+        updatedAt: undefined,
+        saved: undefined,
+        reference: undefined,
+        userId: undefined,
+        id: undefined,
+      };
+    }
   }
   payout.init(
     {
