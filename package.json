@@ -2,10 +2,12 @@
   "name": "stay-demo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "start": "node build/index.js",
+    "postinstall": "tsc"
   },
   "keywords": [],
   "author": "",
