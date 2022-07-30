@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class wallet extends Model {
+  class withdraw extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,32 +9,36 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      wallet.belongsTo(models.user);
-      wallet.hasMany(models.deposit);
-      wallet.hasMany(models.withdraw);
+      withdraw.belongsTo(models.wallet);
     }
   }
-  wallet.init(
+  withdraw.init(
     {
-      balance: {
+      walletId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0,
       },
-      pin: {
+      amount: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 1234,
       },
-      userId: {
+      payoutId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      reference: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      status: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "wallet",
+      modelName: "withdraw",
     }
   );
-  return wallet;
+  return withdraw;
 };

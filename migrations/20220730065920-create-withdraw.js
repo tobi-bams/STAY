@@ -1,34 +1,26 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("payouts", {
+    await queryInterface.createTable("withdraws", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
+      walletId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "users",
+          model: "wallets",
           key: "id",
         },
       },
-      accountName: {
-        type: Sequelize.STRING,
+      amount: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-      accountNumber: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      bankName: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      bankCode: {
+      payoutId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -36,10 +28,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      saved: {
-        type: Sequelize.BOOLEAN,
+      status: {
+        type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
@@ -52,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("payouts");
+    await queryInterface.dropTable("withdraws");
   },
 };
