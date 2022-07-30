@@ -14,3 +14,8 @@ export interface JWTUser {
   fullname: string;
   email: string;
 }
+
+export interface Bank {
+  bank_code: string;
+  account_number: string;
+}

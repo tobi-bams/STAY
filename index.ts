@@ -8,6 +8,7 @@ import Webhook from "./routes/webhook";
 import Wallet from "./routes/wallet";
 import Exchange from "./routes/exchange";
 import Payout from "./routes/payout";
+import Account from "./routes/account";
 
 const app: Application = express();
 
@@ -21,6 +22,7 @@ app.use("/webhook", Webhook);
 app.use("/wallet", Wallet);
 app.use("/exchange", Exchange);
 app.use("/payout", Payout);
+app.use("/account", Account);
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, async () => {

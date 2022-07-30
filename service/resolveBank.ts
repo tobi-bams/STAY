@@ -1,9 +1,5 @@
 import api from "./api";
-
-interface Bank {
-  bank_code: string;
-  account_number: string;
-}
+import { Bank } from "../interfaces/user";
 
 interface Response {
   status: boolean;
