@@ -12,7 +12,7 @@ route.get("/name", auth, async (req: Request, res: Response) => {
   res.status(account.status).json(account.body);
 });
 
-route.get("/banks", auth, async (req: Request, res: Response) => {
+route.get("/banks", async (req: Request, res: Response) => {
   const banks = await getAllbanks();
   res.status(banks.status).json(banks.body);
 });
