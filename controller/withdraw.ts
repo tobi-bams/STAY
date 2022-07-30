@@ -52,7 +52,6 @@ const withdrawHandler = async (data: Widthdraw) => {
       amount: amount + 10000,
     };
     const requestPayout = await api.post("payouts", payoutDetails);
-    console.log(requestPayout.data.payout);
     await models.withdraw.create(
       {
         walletId: data.wallet_id,
@@ -107,14 +106,18 @@ export const Withdraw = async (req: Req) => {
       where: { accountNumber: req.account_number },
     });
     if (payoutExist) {
-      const withdraw = await withdrawHandler({
-        balance: user.wallet.balance,
-        payout_id: payoutExist.id,
-        payout_reference: payoutExist.reference,
-        wallet_id: user.wallet.id,
-        amount: req.amount,
-      });
-      return withdraw;
+      if (payoutExist.bankCode === req.bank_code) {
+        const withdraw = await withdrawHandler({
+          balance: user.wallet.balance,
+          payout_id: payoutExist.id,
+          payout_reference: payoutExist.reference,
+          wallet_id: user.wallet.id,
+          amount: req.amount,
+        });
+        return withdraw;
+      } else {
+        return ResponseHandler(400, "Invalid Bank Code");
+      }
     } else {
       const account_name = await resolveBank({
         bank_code: req.bank_code,
