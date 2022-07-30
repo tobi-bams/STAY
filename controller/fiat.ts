@@ -1,7 +1,7 @@
 import { getFiatValue } from "../service/getFiatValue";
 import { ResponseHandler } from "../util/response";
 import { resolveBank } from "../service/resolveBank";
-import { Bank } from "../interfaces/user";
+import api from "../service/api";
 export const getCryptoToFiat = async (coin: any) => {
   if (!coin) {
     return ResponseHandler(400, "Please pass Coin value");
@@ -30,5 +30,15 @@ export const getAccountName = async (bank: any) => {
     }
   } else {
     return ResponseHandler(400, "Unable to resolve account");
+  }
+};
+
+export const getAllbanks = async () => {
+  try {
+    const banks = await api.get("payouts/accounts/banks");
+    return ResponseHandler(200, banks.data.message, banks.data.banks);
+  } catch (error) {
+    console.log(error);
+    return ResponseHandler(500, "Internal Server Error");
   }
 };
