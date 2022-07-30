@@ -7,6 +7,7 @@ import Address from "./routes/generate_address";
 import Webhook from "./routes/webhook";
 import Wallet from "./routes/wallet";
 import Exchange from "./routes/exchange";
+import Payout from "./routes/payout";
 
 const app: Application = express();
 
@@ -19,6 +20,7 @@ app.use("/address", Address);
 app.use("/webhook", Webhook);
 app.use("/wallet", Wallet);
 app.use("/exchange", Exchange);
+app.use("/payout", Payout);
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, async () => {
