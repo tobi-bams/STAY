@@ -14,7 +14,9 @@ export const savePayout = async (data: JWTUser) => {
 
 export const getPayout = async (data: JWTUser) => {
   try {
-    const payout = await models.payout.findOne({ where: { userId: data.id } });
+    const payout = await models.payout.findOne({
+      where: { userId: data.id, saved: true },
+    });
     return ResponseHandler(200, "Bank Details", payout);
   } catch (error) {
     console.log(error);
